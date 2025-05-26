@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Access</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h2>Request Access</h2>
+<form th:action="@{/request_access}" method="post">
+    <div>
+        <label>Service:</label>
+        <select name="serviceId" required>
+            <option value="" disabled selected>Выберите сервис</option>
+            <option th:each="service : ${services}" th:value="${service.id}" th:text="${service.serviceName}"></option>
+        </select>
+
+    </div>
+    <div>
+        <label>Role:</label>
+        <select name="roleId" required>
+            <option value="" disabled selected>Выберите роль</option>
+            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.roleName}"></option>
+        </select>
+    </div>
+    <button type="submit">Request Access</button>
+    <div th:if="${error}" style="color:red;" th:text="${error}"></div>
+</form>
+<a th:href="@{/requests}">Back to Requests</a>
+</body>
+</html>

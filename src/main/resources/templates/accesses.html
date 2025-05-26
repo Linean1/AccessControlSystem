@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Accesses</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h2>My Accesses</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Service</th>
+        <th>Role</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="request : ${accesses}">
+        <td th:text="${request.id}"></td>
+        <td th:text="${request.service.serviceName}"></td>
+        <td th:text="${request.role.roleName}"></td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/requests}">Back to Requests</a> |
+<a th:href="@{/login}">Logout</a>
+</body>
+</html>

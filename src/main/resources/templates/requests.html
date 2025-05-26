@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Requests</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h2>My Requests</h2>
+<div th:if="${!#authorization.expression('hasAnyRole(''ADMIN'', ''OWNER'')')}">
+    <form th:action="@{/requests}" method="get">
+        <select name="status">
+            <option value="">All</option>
+            <option th:each="status : ${statuses}" th:value="${status.name}" th:text="${status.name}"></option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+</div>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Service</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="request : ${requests}">
+        <td th:text="${request.id}"></td>
+        <td th:text="${request.service.serviceName}"></td>
+        <td th:text="${request.role.roleName}"></td>
+        <td th:text="${request.requestHistories[request.requestHistories.size() - 1].status.name}"></td>
+        <td>
+            <div th:if="${request.requestHistories[request.requestHistories.size() - 1].status.name == 'REQUESTED' and request.user.username == #authentication.principal.username}">
+                <a th:href="@{/request_edit(requestId=${request.id})}">Edit</a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${#authorization.expression('hasRole(''OWNER'')')}">
+    <h2>Requests for Owner</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Service</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="request : ${ownerRequests}">
+            <td th:text="${request.id}"></td>
+            <td th:text="${request.user.username}"></td>
+            <td th:text="${request.service.serviceName}"></td>
+            <td th:text="${request.role.roleName}"></td>
+            <td th:text="${request.requestHistories[request.requestHistories.size() - 1].status.name}"></td>
+            <td>
+                <div th:if="${request.requestHistories[request.requestHistories.size() - 1].status.name == 'REQUESTED' and request.user.username != #authentication.principal.username}">
+                    <a th:href="@{/approve(requestId=${request.id})}">Approve</a> |
+                    <a th:href="@{/reject(requestId=${request.id})}">Reject</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+    <h2>Requests for Admin</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Service</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="request : ${adminRequests}">
+            <td th:text="${request.id}"></td>
+            <td th:text="${request.user.username}"></td>
+            <td th:text="${request.service.serviceName}"></td>
+            <td th:text="${request.role.roleName}"></td>
+            <td th:text="${request.requestHistories[request.requestHistories.size() - 1].status.name}"></td>
+            <td>
+                <div th:if="${request.requestHistories[request.requestHistories.size() - 1].status.name == 'APPROVED_BY_OWNER'}">
+                    <a th:href="@{/admin_approve(requestId=${request.id})}">Approve</a> |
+                    <a th:href="@{/admin_reject(requestId=${request.id})}">Reject</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<a th:href="@{/request_access}">Request Access</a> |
+<a th:href="@{/accesses}">My Accesses</a> |
+<a th:href="@{/login}">Logout</a>
+</body>
+</html>
