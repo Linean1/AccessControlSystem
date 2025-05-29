@@ -71,7 +71,6 @@ public class RequestController {
         AccessRequest request = accessRequestService.findById(requestId);
         if (request != null && request.getRequestHistories().get(request.getRequestHistories().size() - 1).getStatus().getName().equals("APPROVED_BY_OWNER")) {
             accessRequestService.updateRequestStatus(requestId, "GRANTED", admin.getId());
-            // Добавление роли пользователю (логика зависит от вашей системы)
         }
         return "redirect:/requests";
     }
