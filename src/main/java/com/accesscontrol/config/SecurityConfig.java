@@ -31,9 +31,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/login", "/css/**").permitAll()
-                        .requestMatchers("/request_access", "/requests", "/request_edit").authenticated() // Разрешаем всем аутентифицированным
-                        .requestMatchers("/approve", "/reject").hasRole("OWNER") // Ограничиваем только для OWNER
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Пример для админских маршрутов
+                        .requestMatchers("/request_access", "/requests", "/request_edit").authenticated()
+                        .requestMatchers("/approve", "/reject").hasRole("OWNER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -61,7 +61,7 @@ public class SecurityConfig {
                     .map(Role::getRoleName)
                     .collect(Collectors.toList());
             if (roles.isEmpty()) {
-                roles.add("USER"); // Роль по умолчанию
+                roles.add("USER");
             }
             return org.springframework.security.core.userdetails.User
                     .withUsername(user.getUsername())

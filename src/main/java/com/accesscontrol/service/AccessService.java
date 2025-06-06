@@ -23,10 +23,10 @@ public class AccessService {
         return accessRequestRepository.findByUser(user).stream()
                 .filter(r -> {
                     // Проверяем последнюю историю заявки
-                    List<RequestHistory> histories = r.getRequestHistories(); // Убедитесь, что метод существует
+                    List<RequestHistory> histories = r.getRequestHistories();
                     if (histories == null || histories.isEmpty()) return false;
                     RequestHistory latestHistory = histories.get(histories.size() - 1);
-                    return latestHistory != null && "GRANTED".equals(latestHistory.getStatus().getName()); // Убедитесь, что getStatus() существует
+                    return latestHistory != null && "GRANTED".equals(latestHistory.getStatus().getName());
                 })
                 .collect(Collectors.toList());
     }
